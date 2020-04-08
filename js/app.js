@@ -11,6 +11,7 @@ const btnFiltro = document.getElementById('btnFiltros');
 const btnBuscar = document.querySelector('#btnBuscar');
 const inputMunicipio = document.querySelector('#municipio');
 const btnUbicacion = document.querySelector('#btnMyLocate');
+let gasolineras;
 
 
 
@@ -68,10 +69,18 @@ btnFiltro.addEventListener('click', () => {
 
 });
 
+inputMunicipio.addEventListener('keydown', (e) => {
+     if (e.keyCode == '13') buscar();
+})
 
 // Mostrar las gasolineras cuando hagamos submit el form
 formulario.addEventListener('submit', (e) => {
      e.preventDefault();
+     buscar()
+
+})
+
+function buscar(){
      let municipio;
      let radioCombustible = document.querySelectorAll('#radioCombustible');
      let combustible = '';
@@ -80,7 +89,7 @@ formulario.addEventListener('submit', (e) => {
 
      //Borramos los resultados si existen con anterioridad
      let child = resultadoDiv.lastElementChild;
-     while ( child ) {
+     while (child) {
           resultadoDiv.removeChild(child);
           child = resultadoDiv.lastElementChild;
      }
@@ -90,15 +99,28 @@ formulario.addEventListener('submit', (e) => {
           municipio = inputMunicipio.value;
      }
      //comprobamos si el DivFiltro esta visible, si es asi enviamos las opciones a nuestro mostrar gasolienras
-     if ( divFiltros.classList.contains('d-flex') ) {
+     if (divFiltros.classList.contains('d-flex')) {
           radioCombustible.forEach(radio => {
-               if(radio.checked) combustible = radio.value;
+               if (radio.checked) combustible = radio.value;
           });
           ordenPrecioSelect = document.querySelector('#ordenPrecio');
           ordenPrecio = ordenPrecioSelect.options[ordenPrecioSelect.selectedIndex].value;
      }
-     
-     // despues llamamos mostrarGasolineras;
-     ui.mostrarGasolineras(municipio, combustible, ordenPrecio);
 
-})
+     // por ultimo llamamos mostrarGasolineras;
+     ui.mostrarGasolineras(municipio, combustible, ordenPrecio);
+     abrirPopup();  
+
+}
+
+function abrirPopup() {
+     setTimeout(() => {
+          gasolineras = document.querySelectorAll('.container-popup');
+          gasolineras.forEach(item => {
+               item.addEventListener('click', (e) => {
+                    ui.abrirPopup(item.id)
+               })
+          })
+     }, 200);
+}
+

@@ -122,14 +122,17 @@ class UI {
                     minWidth: 250,
                     maxWidth: 400
                }).on('click', (e) => {
-                    // Guardamos y asociamos los id de los popups con los id de los divs 
-                    this._popUp.push({'_id': e.target._leaflet_id, 'popupId': objectid});
+                    // añadimos efecto hover al div que contiene la informacion del marker
+                    //this.efectoHover(e.target._leaflet_id);
                });
-
+               
                // Añadimos el marker al Layer
                this.markers.addLayer(marker);  
                // Añadimos el Layer a nuestro mapa
-               this.markers.addTo(this.mapa);   
+               this.markers.addTo(this.mapa); 
+               
+               // Guardamos los markers id y los asociamos con el id del resultado
+               this._popUp.push({ marker, 'popupId': objectid });
 
           });
 
@@ -150,7 +153,7 @@ class UI {
           if ( resultados.length ) { 
 
                //recorremos el array para obtener el _content
-               resultados.forEach( (resultado, i) => {
+               resultados.forEach( (resultado) => {
                     resultadoDiv.innerHTML += resultado._content;
                });
 
@@ -166,9 +169,21 @@ class UI {
           resultadoDiv.classList.add('d-block');
      }
 
-     // Funcion para abrir el popup cuando haces click en el menu y viceversa
-     abrirPopup ( div ) {
-          console.log(div);
+     efectoHover() {
+          
+     }
+
+     abrirPopup ( idpopup ) {
+
+          let popup;
+          this._popUp.forEach(item => {
+               if (item.popupId == idpopup ) {                
+                    popup = item.marker;
+               }
+          });
+          this.mapa.eachLayer(layer => {
+               layer.openPopup([latlng.lat, latlng.lng])
+          })      
      }
      
 }
