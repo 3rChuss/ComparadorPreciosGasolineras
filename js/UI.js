@@ -39,7 +39,12 @@ class UI {
 
      mostrarGasolineras(municipio, combustible = null, ordenPor = null){
 
-          let url = `https://www.mapabase.es/arcgis/rest/services/Otros/Gasolineras/FeatureServer/0/query?where=municipio%20%3D%20%27${municipio.toUpperCase()}%27&outFields=*&outSR=4326&f=json`;
+          let url = `https://services3.arcgis.com/UlkXMDr5qa7NVX95/arcgis/rest/services/Gasolineras_de_Espa%C3%B1a/FeatureServer/0/query?where=municipio%20%3D%20%27${municipio.toUpperCase()} %27&outFields=*&outSR=4326&f=json`;
+
+          
+
+          //Cambio de url 10 de Dic 2020
+          //`https://www.mapabase.es/arcgis/rest/services/Otros/Gasolineras/FeatureServer/0/query?where=municipio%20%3D%20%27${municipio.toUpperCase()}%27&outFields=*&outSR=4326&f=json`;
 
 
           this.api.obtenerDatos(url)
@@ -64,6 +69,9 @@ class UI {
 
           // Recorrer las gasolineras
           datos.forEach(dato => {
+
+               console.log(dato.attributes);
+
                /** destructuring para obtener la informacion
                 *  Longitud y Latitud
                 *  Nombre Gasolinera
@@ -74,10 +82,10 @@ class UI {
                     attributes: { objectid },
                     attributes: { longitud }, 
                     attributes: { latitud },
-                    attributes: { precio_gasóleo_a },
-                    attributes: { precio_nuevo_gasóleo_a },
-                    attributes: { precio_gasolina_95 },
-                    attributes: { precio_gasolina_98 },
+                    attributes: { precio_g_1 }, //gasolina 95
+                    attributes: { precio_g_3 }, //gasolina 98
+                    attributes: { precio_g_5 }, //diesel
+                    attributes: { precio_g_6 }, //diesel premiun
                     attributes: { municipio },
                     attributes: { fecha },
                     attributes: { rótulo }
@@ -96,10 +104,10 @@ class UI {
                                         <div class='card-title'>
                                              Localidad: <span id='precio'>${municipio}</span>
                                         </div>
-                                             <p class='card-text'>Gasolina 95:&emsp;<span id='precio'>${precio_gasolina_95 == null ? '--' : precio_gasolina_95} €</span></p>
-                                             <p class='card-text'>Gasolina 98:&emsp;<span id='precio'>${(precio_gasolina_98 == null || precio_gasolina_98 == '') ? '--' :precio_gasolina_98} €</span></p>
-                                             <p class='card-text'>Diésel:&emsp;<span id='precio'>${precio_gasóleo_a} €</span></p>
-                                             <p class='card-text'>Diésel Premiun:&emsp;<span id='precio'>${precio_nuevo_gasóleo_a == null ? '--' : precio_nuevo_gasóleo_a} €</span></p>
+                                             <p class='card-text'>Gasolina 95:&emsp;<span id='precio'>${precio_g_1 == null ? '--' : precio_g_1} €</span></p>
+                                             <p class='card-text'>Gasolina 98:&emsp;<span id='precio'>${(precio_g_3 == null || precio_g_3 == '') ? '--' :precio_g_3} €</span></p>
+                                             <p class='card-text'>Diésel:&emsp;<span id='precio'>${precio_g_5 == null ? '--' : precio_g_5} €</span></p>
+                                             <p class='card-text'>Diésel Premiun:&emsp;<span id='precio'>${precio_g_6 == null ? '--' : precio_g_6} €</span></p>
                                         </div>
                                    <div class="card-footer text-muted">
                                         <small>Actualizado a día de: <span id='precio'>${fechaActualizacion.toLocaleDateString()}</span></small>
